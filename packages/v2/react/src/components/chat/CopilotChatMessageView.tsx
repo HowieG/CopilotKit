@@ -356,7 +356,8 @@ export function CopilotChatMessageView({
   };
 
   const messageElements: React.ReactElement[] = messages
-    .flatMap((message) => {
+    .flatMap((message, idx) => {
+      const keyBase = `${message.id}-${idx}`;
       const elements: (React.ReactElement | null | undefined)[] = [];
       const stateSnapshot = getStateSnapshotForMessage(message.id);
 
@@ -364,7 +365,7 @@ export function CopilotChatMessageView({
       if (renderCustomMessage) {
         elements.push(
           <MemoizedCustomMessage
-            key={`${message.id}-custom-before`}
+            key={`${keyBase}-custom-before`}
             message={message}
             position="before"
             renderCustomMessage={renderCustomMessage}
@@ -397,7 +398,7 @@ export function CopilotChatMessageView({
 
         elements.push(
           <MemoizedAssistantMessage
-            key={message.id}
+            key={keyBase}
             message={message as AssistantMessage}
             messages={messages}
             isRunning={isRunning}
@@ -427,7 +428,7 @@ export function CopilotChatMessageView({
 
         elements.push(
           <MemoizedUserMessage
-            key={message.id}
+            key={keyBase}
             message={message as UserMessage}
             UserMessageComponent={UserComponent}
             slotProps={userSlotProps}
@@ -438,7 +439,7 @@ export function CopilotChatMessageView({
         const activityMsg = message as ActivityMessage;
         elements.push(
           <MemoizedActivityMessage
-            key={message.id}
+            key={keyBase}
             message={activityMsg}
             renderActivityMessage={renderActivityMessage}
           />,
@@ -463,7 +464,7 @@ export function CopilotChatMessageView({
 
         elements.push(
           <MemoizedReasoningMessage
-            key={message.id}
+            key={keyBase}
             message={message as ReasoningMessage}
             messages={messages}
             isRunning={isRunning}
@@ -477,7 +478,7 @@ export function CopilotChatMessageView({
       if (renderCustomMessage) {
         elements.push(
           <MemoizedCustomMessage
-            key={`${message.id}-custom-after`}
+            key={`${keyBase}-custom-after`}
             message={message}
             position="after"
             renderCustomMessage={renderCustomMessage}
