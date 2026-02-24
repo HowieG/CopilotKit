@@ -87,11 +87,16 @@ export const Messages = ({
 
   const LoadingIcon = () => <span>{icons.activityIcon}</span>;
 
+  const lastVisibleMessageIndex = messages.reduce(
+    (lastIdx, msg, idx) => (msg.role === "user" || msg.role === "assistant" ? idx : lastIdx),
+    -1,
+  );
+
   return (
     <div className="copilotKitMessages" ref={messagesContainerRef}>
       <div className="copilotKitMessagesContainer">
         {messages.map((message, index) => {
-          const isCurrentMessage = index === messages.length - 1;
+          const isCurrentMessage = index === lastVisibleMessageIndex;
           return (
             <MessageRenderer
               key={index}
@@ -112,7 +117,7 @@ export const Messages = ({
             />
           );
         })}
-        {messages[messages.length - 1]?.role === "user" && inProgress && (
+        {messages[lastVisibleMessageIndex]?.role === "user" && inProgress && (
           <LoadingIcon />
         )}
         {interrupt}
