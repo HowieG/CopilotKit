@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import {
-  useAgent,
   useCopilotChatConfiguration,
   useCopilotKit,
 } from "@copilotkitnext/react";
@@ -70,7 +69,7 @@ export function CopilotListeners() {
   const resolvedAgentId = existingConfig?.agentId;
   const { setBannerError } = useToast();
 
-  const { agent } = useAgent({ agentId: resolvedAgentId });
+  const agent = copilotkit.getAgent(resolvedAgentId);
 
   usePredictStateSubscription(agent);
 
