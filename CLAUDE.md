@@ -1,3 +1,7 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 <!-- nx configuration start-->
 <!-- Leave the start & end comments to automatically receive updates. -->
 
@@ -20,9 +24,84 @@ AI agent framework with three layers: **Frontend** (React/Angular/Vanilla) → *
 ## Essentials
 
 - **Nx monorepo** — always run tasks through `nx` (`nx run`, `nx run-many`, `nx affected`), never the underlying tooling directly.
+- **pnpm** — package manager (`pnpm@10.x`). Run `pnpm install` to set up. Node.js 18+ required.
 - **V1 wraps V2** — V2 (`@copilotkitnext/`) is the real implementation. V1 (`@copilotkit/`) is the public compatibility layer that delegates to V2. Build new features in V2 first. Add V1 wrappers only if backward compatibility is needed.
 - **Simplicity** — prefer the simplest correct solution. For non-trivial changes, consider if there's a cleaner approach before committing.
 - **Worktrees** — always work in a git worktree for isolation. See [Git & PRs](.claude/docs/git.md) for the full workflow.
+
+## Common Commands
+
+All commands run from the repo root via Nx:
+
+```bash
+# Build
+pnpm build                                    # Build all packages
+nx run @copilotkitnext/react:build             # Build a single V2 package
+nx run @copilotkit/react-core:build            # Build a single V1 package
+
+# Test (Vitest)
+pnpm test                                     # Run all tests
+nx run @copilotkitnext/react:test              # Test a single package
+pnpm test:next                                # Test all V2 packages
+pnpm test:classic                             # Test all V1 packages
+
+# Lint
+pnpm lint                                     # Lint all packages
+nx run @copilotkitnext/react:lint              # Lint a single package
+
+# Type checking
+pnpm check-types                              # Type-check all packages
+
+# Dev mode (build + watch for changes)
+pnpm dev                                      # Watch all packages
+pnpm dev:next                                 # Watch V2 packages only
+pnpm dev:classic                              # Watch V1 packages only
+
+# E2E tests (Playwright, from examples/e2e/)
+nx run e2e:e2e                                # Run E2E tests
+
+# Storybook
+pnpm storybook                                # React storybook
+pnpm storybook:angular                        # Angular storybook
+```
+
+## Commit Message Format
+
+```
+<type>(<package>): <subject>
+```
+
+Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`
+
+Example: `fix(runtime): missing entity on init`
+
+## Package Layout
+
+```
+packages/
+  v2/     # V2 packages (@copilotkitnext/*) — the real implementation
+    shared/       # Common types, utilities, constants
+    core/         # CopilotKitCore orchestrator (framework-agnostic)
+    react/        # React hooks and CopilotKitProvider
+    angular/      # Angular services and DI
+    runtime/      # Server-side CopilotRuntime (Express/Hono adapters)
+    agent/        # BuiltInAgent (default agent via Vercel AI SDK)
+    voice/        # Voice input/transcription
+    web-inspector/# Debug console (Lit web component)
+    sqlite-runner/# SQLite-based AgentRunner
+  v1/     # V1 packages (@copilotkit/*) — public API wrappers around V2
+    react-core/   # <CopilotKit> provider and hooks
+    react-ui/     # Chat UI: CopilotChat, CopilotPopup, CopilotSidebar
+    react-textarea/# CopilotTextarea for AI-assisted editing
+    runtime/      # Server runtime with GraphQL + LLM adapters
+    shared/       # Shared types and telemetry
+    runtime-client-gql/ # urql GraphQL client
+    sdk-js/       # LangGraph/LangChain agent helpers
+examples/
+  v1/     # V1 example apps
+  v2/     # V2 example apps (React, Angular, docs)
+  e2e/    # Playwright E2E tests
+```
 
 ## Reference (read when relevant to your task)
 
