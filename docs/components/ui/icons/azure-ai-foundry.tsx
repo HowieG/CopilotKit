@@ -22,25 +22,24 @@ export const AzureAIFoundryIcon = ({
       style={{ width: `${width}px`, height: `${height}px` }}
       xmlns="http://www.w3.org/2000/svg"
     >
-      <defs>
-        <linearGradient id="azure-foundry-grad" x1="0" y1="0" x2="18" y2="18" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#0078D4" />
-          <stop offset="100%" stopColor="#5C2D91" />
-        </linearGradient>
-      </defs>
+      {/* Outer ring: outer triangle minus middle triangle */}
       <path
-        d="M9.32 2.59L15.78 13.56H2.85L9.32 2.59z"
-        fill="url(#azure-foundry-grad)"
+        d="M9.32 2.59L15.78 13.56H2.85Z M9.32 5.87L13.46 13.56H5.17Z"
+        fill="currentColor"
+        fillRule="evenodd"
       />
+      {/* Middle ring: middle triangle minus inner triangle */}
       <path
-        d="M9.32 5.87L13.46 13.56H5.17L9.32 5.87z"
-        fill="#50E6FF"
-        opacity="0.8"
-      />
-      <path
-        d="M7 13.56h4.64L9.32 9.71 7 13.56z"
-        fill="#fff"
+        d="M9.32 5.87L13.46 13.56H5.17Z M7 13.56h4.64L9.32 9.71Z"
+        fill="currentColor"
+        fillRule="evenodd"
         opacity="0.6"
+      />
+      {/* Inner triangle */}
+      <path
+        d="M7 13.56h4.64L9.32 9.71Z"
+        fill="currentColor"
+        opacity="0.3"
       />
     </svg>
   );
