@@ -13,6 +13,7 @@
     "ag2",
     "agent-spec",
     "llamaindex",
-    "a2a"
+    "a2a",
+    "azure-ai-foundry"
   ]
 }

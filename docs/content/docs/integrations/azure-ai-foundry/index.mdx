@@ -1,0 +1,52 @@
+---
+title: Introduction
+icon: "custom/azureAIFoundry"
+description: Build AI-powered applications with Azure AI Foundry and CopilotKit via AG-UI.
+hideHeader: true
+hideTOC: true
+---
+import { AzureAIFoundryIcon } from "@/components/ui/icons/azure-ai-foundry";
+import { FrameworkOverview } from "@/components/content/landing-pages/framework-overview";
+
+<FrameworkOverview
+  frameworkName="Azure AI Foundry"
+  frameworkIcon={<AzureAIFoundryIcon className="h-10 w-10 text-primary" width={40} height={40} />}
+  header="Build AI-powered apps with Azure AI Foundry"
+  subheader="Connect your Azure AI Foundry agents to rich, interactive user experiences using CopilotKit and AG-UI. Leverage Azure's enterprise-grade model catalog, RAG, and guardrails with generative UI."
+  bannerVideo="https://cdn.copilotkit.ai/docs/copilotkit/videos/coagents/overview.mp4"
+  guideLink="/azure-ai-foundry/quickstart"
+  initCommand="npx copilotkit@latest create -f azure-ai-foundry"
+  featuresLink="https://feature-viewer.copilotkit.ai"
+  supportedFeatures={[
+    {
+      title: "Generative UI",
+      description: "Render your agent's state, progress, outputs, and tool calls with custom UI components in real-time. Bridges the gap between AI agents and user interfaces.",
+      documentationLink: "/azure-ai-foundry/quickstart",
+      demoLink: "https://feature-viewer.copilotkit.ai",
+      videoUrl: "https://cdn.copilotkit.ai/docs/copilotkit/videos/coagents/haiku.mp4"
+    },
+    {
+      title: "Human in the Loop",
+      description: "Empower users to guide agents at key checkpoints. Combine the best of AI and human judgment for more reliable and controllable agent behavior.",
+      documentationLink: "/azure-ai-foundry/quickstart",
+      demoLink: "https://feature-viewer.copilotkit.ai",
+      videoUrl: "https://cdn.copilotkit.ai/docs/copilotkit/images/coagents/human-in-the-loop-example.mp4"
+    },
+    {
+      title: "Shared State",
+      description: "Keep your agent and your app in sync. Your agent can see everything in your app, and your app can react to your agent in real-time.",
+      documentationLink: "/azure-ai-foundry/quickstart",
+      demoLink: "https://feature-viewer.copilotkit.ai",
+      videoUrl: "https://cdn.copilotkit.ai/docs/copilotkit/videos/coagents/shared-state.mp4"
+    }
+  ]}
+  architectureImage="https://cdn.copilotkit.ai/docs/copilotkit/images/generic-agui-architecture.png"
+  liveDemos={[]}
+  tutorialLink="/azure-ai-foundry/quickstart"
+/>
+
+## Resources
+
+- [Azure AI Foundry Documentation](https://learn.microsoft.com/en-us/azure/ai-foundry/)
+- [Azure AI Projects SDK (Python)](https://learn.microsoft.com/en-us/python/api/overview/azure/ai-projects-readme)
+- [Azure AI Foundry Portal](https://ai.azure.com)

@@ -14,7 +14,7 @@ import {
   getIntegration,
 } from "@/lib/integrations";
 import { hasIntegrationFeature } from "@/lib/integration-features";
-import { AgentSpecMarkIcon, A2AIcon } from "@/lib/icons/custom-icons";
+import { AgentSpecMarkIcon, A2AIcon, AzureAIFoundryIcon } from "@/lib/icons/custom-icons";
 import AdkIcon from "../ui/icons/adk";
 import Ag2Icon from "../ui/icons/ag2";
 import CrewaiIcon from "../ui/icons/crewai";
@@ -44,6 +44,7 @@ const INTEGRATION_ICONS: Record<
   "agent-spec": AgentSpecMarkIcon,
   llamaindex: LlamaIndexIcon,
   a2a: A2AIcon,
+  "azure-ai-foundry": AzureAIFoundryIcon,
 };
 
 interface Integration {

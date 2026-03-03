@@ -25,6 +25,7 @@ export const INTEGRATION_ORDER = [
   "agent-spec",
   "llamaindex",
   "a2a",
+  "azure-ai-foundry",
 ] as const;
 
 export type IntegrationId = (typeof INTEGRATION_ORDER)[number];
@@ -107,6 +108,12 @@ export const INTEGRATION_METADATA: Record<
     href: "/a2a",
     description:
       "Google's Agent-to-Agent protocol for inter-agent communication.",
+  },
+  "azure-ai-foundry": {
+    label: "Azure AI Foundry",
+    href: "/azure-ai-foundry",
+    description:
+      "Microsoft's unified platform for building and deploying AI agents.",
   },
 };
 

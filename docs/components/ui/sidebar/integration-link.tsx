@@ -17,7 +17,7 @@ import PydanticAiIcon from "../icons/pydantic-ai";
 import ChevronRightIcon from "../icons/chevron";
 import { MicrosoftIcon } from "../icons/microsoft";
 import { AwsStrandsIcon } from "../icons/aws-strands";
-import { AgentSpecMarkIcon, A2AIcon } from "@/lib/icons/custom-icons";
+import { AgentSpecMarkIcon, A2AIcon, AzureAIFoundryIcon } from "@/lib/icons/custom-icons";
 import { IntegrationId } from "@/lib/integrations";
 
 type Node = DocsLayoutProps["tree"]["children"][number] & {
@@ -53,6 +53,7 @@ const INTEGRATION_ICONS: Record<
   "microsoft-agent-framework": MicrosoftIcon,
   "aws-strands": AwsStrandsIcon,
   a2a: A2AIcon,
+  "azure-ai-foundry": AzureAIFoundryIcon,
 };
 
 const ICON_SIZE = 20;

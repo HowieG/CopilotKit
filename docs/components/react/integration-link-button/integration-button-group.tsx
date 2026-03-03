@@ -11,7 +11,7 @@ import MastraIcon from "@/components/ui/icons/mastra";
 import PydanticAiIcon from "@/components/ui/icons/pydantic-ai";
 import { ComponentType } from "react";
 import { MicrosoftIcon } from "@/components/ui/icons/microsoft";
-import { AgentSpecMarkIcon, A2AIcon } from "@/lib/icons/custom-icons";
+import { AgentSpecMarkIcon, A2AIcon, AzureAIFoundryIcon } from "@/lib/icons/custom-icons";
 import {
   INTEGRATION_ORDER,
   IntegrationId,
@@ -42,6 +42,7 @@ const INTEGRATION_ICONS: Record<
   "microsoft-agent-framework": MicrosoftIcon,
   "aws-strands": AwsStrandsIcon,
   a2a: A2AIcon,
+  "azure-ai-foundry": AzureAIFoundryIcon,
 };
 
 // Build integrations list from canonical order

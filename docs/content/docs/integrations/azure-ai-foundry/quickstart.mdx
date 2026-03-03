@@ -1,0 +1,390 @@
+---
+title: Quickstart
+description: Build an AI-powered app with Azure AI Foundry and CopilotKit in 10 minutes.
+icon: "lucide/Play"
+hideTOC: true
+---
+
+import { TailoredContent, TailoredContentOption } from "@/components/react/tailored-content.tsx";
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { Accordions, Accordion } from "fumadocs-ui/components/accordion";
+import { UserIcon, PaintbrushIcon, WrenchIcon, RepeatIcon } from "lucide-react";
+
+## Prerequisites
+
+Before you begin, you'll need the following:
+
+- An [Azure AI Foundry](https://ai.azure.com) project with a deployed model (e.g. GPT-4o)
+- Azure CLI installed and logged in (`az login`)
+- Python 3.10+ and [uv](https://docs.astral.sh/uv/) (for the agent backend)
+- Node.js 20+
+- Your favorite package manager (npm, pnpm, yarn, or bun)
+
+## Getting started
+
+<Steps>
+    <TailoredContent
+        className="step"
+        id="agent"
+        header={
+            <div>
+                <p className="text-xl font-semibold">Choose your starting point</p>
+                <p className="text-base">
+                    You can either start fresh with our starter template or integrate CopilotKit into your existing Azure AI Foundry project.
+                </p>
+            </div>
+        }
+    >
+        <TailoredContentOption
+            id="starter"
+            title="Start from scratch"
+            description="Get started quickly with our ready-to-go starter application."
+        >
+            <Step>
+                ### Run our CLI
+
+                First, we'll use our CLI to create a new project.
+
+                ```bash
+                npx copilotkit@latest create -f azure-ai-foundry
+                ```
+            </Step>
+            <Step>
+                ### Install dependencies
+
+                The starter includes a `postinstall` script that automatically installs both your npm and agent dependencies.
+
+                ```npm
+                npm install
+                ```
+
+                <Callout type="info" title="Manual setup">
+                    If you have issues with automatic Python setup, you can manually install the agent dependencies:
+                    ```bash
+                    npm run install:agent
+                    # or manually:
+                    cd agent
+                    uv sync
+                    ```
+                </Callout>
+            </Step>
+            <Step>
+                ### Configure your environment
+
+                Create a `.env` file inside the `agent` folder with your Azure AI Foundry configuration:
+
+                ```bash title="agent/.env"
+                AZURE_AI_FOUNDRY_PROJECT_ENDPOINT=https://your-project.services.ai.azure.com
+                AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4o
+                ```
+
+                <Callout type="info" title="Authentication">
+                    The starter uses `DefaultAzureCredential`, which supports:
+                    - **Azure CLI** — run `az login` before starting (recommended for development)
+                    - **Managed Identity** — works automatically when deployed to Azure
+                    - **API Key** — set `AZURE_AI_FOUNDRY_API_KEY` in your `.env` if you prefer key-based auth
+
+                    See [Azure Identity documentation](https://learn.microsoft.com/en-us/python/api/overview/azure/identity-readme) for all supported credential types.
+                </Callout>
+            </Step>
+            <Step>
+                ### Start the development server
+
+                <Tabs groupId="package-manager" items={['npm', 'pnpm', 'yarn', 'bun']}>
+                    <Tab value="npm">
+                        ```bash
+                        npm run dev
+                        ```
+                    </Tab>
+                    <Tab value="pnpm">
+                        ```bash
+                        pnpm dev
+                        ```
+                    </Tab>
+                    <Tab value="yarn">
+                        ```bash
+                        yarn dev
+                        ```
+                    </Tab>
+                    <Tab value="bun">
+                        ```bash
+                        bun dev
+                        ```
+                    </Tab>
+                </Tabs>
+
+                This will start both the Next.js UI (port 3000) and agent server (port 8000) concurrently.
+            </Step>
+        </TailoredContentOption>
+        <TailoredContentOption
+            id="bring-your-own"
+            title="Use an existing project"
+            description="I already have an Azure AI Foundry project and want to add CopilotKit."
+        >
+            <Step>
+                ### Set up your Azure AI Foundry agent
+
+                Create a FastAPI server that connects to Azure AI Foundry and exposes an AG-UI endpoint:
+
+                ```python title="agent/src/agent.py"
+                from __future__ import annotations
+
+                import os
+
+                import uvicorn
+                from azure.identity import DefaultAzureCredential
+                from azure.ai.projects import AIProjectClient
+                from agent_framework.azure import AzureOpenAIChatClient
+                from agent_framework import ChatAgent
+                from agent_framework.ag_ui import add_agent_framework_fastapi_endpoint
+                from dotenv import load_dotenv
+                from fastapi import FastAPI
+
+
+                load_dotenv()
+
+                # Connect to Azure AI Foundry
+                project_endpoint = os.getenv("AZURE_AI_FOUNDRY_PROJECT_ENDPOINT")
+                deployment_name = os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME", "gpt-4o")
+
+                credential = DefaultAzureCredential()
+
+                # Create an Azure OpenAI chat client via the Foundry project
+                chat_client = AzureOpenAIChatClient(
+                    credential=credential,
+                    deployment_name=deployment_name,
+                    endpoint=project_endpoint,
+                )
+
+                agent = ChatAgent(
+                    name="FoundryAgent",
+                    instructions="You are a helpful assistant powered by Azure AI Foundry.",
+                    chat_client=chat_client,
+                )
+
+                app = FastAPI(title="Azure AI Foundry Agent")
+                add_agent_framework_fastapi_endpoint(app=app, agent=agent, path="/")
+
+
+                if __name__ == "__main__":
+                    uvicorn.run("agent:app", host="0.0.0.0", port=8000, reload=True)
+                ```
+
+                Set your environment variables and run:
+
+                ```bash title="agent/.env"
+                AZURE_AI_FOUNDRY_PROJECT_ENDPOINT=https://your-project.services.ai.azure.com
+                AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4o
+                ```
+
+                ```bash
+                cd agent
+                uv run src/agent.py
+                ```
+            </Step>
+            <Step>
+                ### Frontend Setup
+                CopilotKit works with any React-based frontend. We'll use Next.js for this example.
+
+                In a new terminal window, run the following commands:
+
+                ```bash
+                npx create-next-app@latest my-copilot-app
+                cd my-copilot-app
+                ```
+            </Step>
+            <Step>
+                ### Install CopilotKit packages
+
+                ```npm
+                npm install @copilotkit/react-ui @copilotkit/react-core @copilotkit/runtime @ag-ui/client
+                ```
+            </Step>
+            <Step>
+                ### Setup Copilot Runtime
+
+                CopilotKit requires a Copilot Runtime endpoint to communicate with your agent.
+
+                Create a new API route at `app/api/copilotkit/route.ts`:
+
+                ```tsx title="app/api/copilotkit/route.ts"
+                import {
+                  CopilotRuntime,
+                  ExperimentalEmptyAdapter,
+                  copilotRuntimeNextJSAppRouterEndpoint,
+                } from "@copilotkit/runtime";
+                import { HttpAgent } from "@ag-ui/client";
+                import { NextRequest } from "next/server";
+
+                const serviceAdapter = new ExperimentalEmptyAdapter();
+
+                // [!code highlight:5]
+                const runtime = new CopilotRuntime({
+                  agents: {
+                    foundry_agent: new HttpAgent({ url: "http://localhost:8000/" }),
+                  },
+                });
+
+                export const POST = async (req: NextRequest) => {
+                  const { handleRequest } = copilotRuntimeNextJSAppRouterEndpoint({
+                    runtime,
+                    serviceAdapter,
+                    endpoint: "/api/copilotkit",
+                  });
+
+                  return handleRequest(req);
+                };
+                ```
+            </Step>
+            <Step>
+                ### Configure CopilotKit Provider
+
+                Wrap your application with the CopilotKit provider:
+
+                ```tsx title="app/layout.tsx"
+                import { CopilotKit } from "@copilotkit/react-core/v2"; // [!code highlight]
+                import "@copilotkit/react-ui/v2/styles.css";
+
+                export default function RootLayout({ children }: {children: React.ReactNode}) {
+                  return (
+                    <html lang="en">
+                      <body>
+                        {/* [!code highlight:3] */}
+                        <CopilotKit runtimeUrl="/api/copilotkit" agent="foundry_agent">
+                          {children}
+                        </CopilotKit>
+                      </body>
+                    </html>
+                  );
+                }
+                ```
+            </Step>
+            <Step>
+              ### Add the chat interface
+
+              Add the CopilotSidebar component to your page:
+
+              ```tsx title="app/page.tsx"
+              "use client";
+
+              // [!code highlight:1]
+              import { CopilotSidebar } from "@copilotkit/react-core/v2";
+
+              export default function Page() {
+                return (
+                  <main>
+                    {/* [!code highlight:6] */}
+                    <CopilotSidebar
+                      labels={{
+                        modalHeaderTitle: "Azure AI Foundry Assistant",
+                        welcomeMessageText: "Hi! I'm powered by Azure AI Foundry. How can I help?",
+                      }}
+                    />
+                    <h1>Your App</h1>
+                  </main>
+                );
+              }
+              ```
+            </Step>
+            <Step>
+              ### Run your Next.js app
+
+              <Tabs groupId="package-manager" items={['npm', 'pnpm', 'yarn', 'bun']}>
+                  <Tab value="npm">
+                      ```bash
+                      npm run dev
+                      ```
+                  </Tab>
+                  <Tab value="pnpm">
+                      ```bash
+                      pnpm dev
+                      ```
+                  </Tab>
+                  <Tab value="yarn">
+                      ```bash
+                      yarn dev
+                      ```
+                  </Tab>
+                  <Tab value="bun">
+                      ```bash
+                      bun dev
+                      ```
+                  </Tab>
+              </Tabs>
+            </Step>
+        </TailoredContentOption>
+    </TailoredContent>
+    <Step>
+        ### Start chatting!
+
+        Your AI agent is now ready to use. Try asking it some questions:
+
+        ```
+        Can you tell me a joke?
+        ```
+
+        ```
+        What can you help me with?
+        ```
+
+        ```
+        Summarize the key features of Azure AI Foundry.
+        ```
+
+        <Accordions className="mb-4">
+            <Accordion title="Troubleshooting">
+                **Agent Connection Issues**
+                - If you see "I'm having trouble connecting to my tools", make sure:
+                  - The Python agent is running on port 8000
+                  - Your Azure credentials are configured correctly (`az login`)
+                  - Both servers started successfully (check terminal output)
+
+                **Azure Authentication Issues**
+                - If the agent fails with credential errors:
+                  ```bash
+                  # Make sure you're logged in
+                  az login
+                  # Verify your subscription
+                  az account show
+                  ```
+
+                **Python Environment Issues**
+                - Verify Python and uv are installed:
+                  ```bash
+                  python --version  # Should be 3.10+
+                  uv --version
+                  ```
+                - Reinstall dependencies:
+                  ```bash
+                  cd agent
+                  uv sync
+                  ```
+
+                **Port Conflicts**
+                - If port 8000 is already in use, update it in:
+                  - `agent/src/agent.py` — change the `uvicorn.run` port
+                  - `src/app/api/copilotkit/route.ts` — update the HttpAgent URL
+            </Accordion>
+        </Accordions>
+
+    </Step>
+</Steps>
+
+## What's next?
+
+Now that you have your basic agent setup, explore these advanced features:
+
+<Cards>
+  <Card
+    title="Generative UI"
+    description="Render your agent's progress and output with custom UI components."
+    href="/azure-ai-foundry/quickstart"
+    icon={<PaintbrushIcon />}
+  />
+  <Card
+    title="Azure AI Foundry Portal"
+    description="Manage your models, deployments, and monitoring in the Azure AI Foundry portal."
+    href="https://ai.azure.com"
+    icon={<WrenchIcon />}
+  />
+</Cards>

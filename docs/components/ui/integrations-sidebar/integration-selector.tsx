@@ -16,7 +16,7 @@ import IntegrationPuzzleIcon from "../icons/integration-puzzle";
 import CheckIcon from "../icons/check";
 import { MicrosoftIcon } from "../icons/microsoft";
 import { AwsStrandsIcon } from "../icons/aws-strands";
-import { AgentSpecMarkIcon, A2AIcon } from "@/lib/icons/custom-icons";
+import { AgentSpecMarkIcon, A2AIcon, AzureAIFoundryIcon } from "@/lib/icons/custom-icons";
 import {
   INTEGRATION_ORDER,
   IntegrationId,
@@ -50,6 +50,7 @@ const INTEGRATION_ICONS: Record<
   "agent-spec": AgentSpecMarkIcon,
   llamaindex: LlamaIndexIcon,
   a2a: A2AIcon,
+  "azure-ai-foundry": AzureAIFoundryIcon,
 };
 
 // Build integration options from canonical order
