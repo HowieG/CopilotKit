@@ -76,7 +76,7 @@ const Page = ({ node, onNavigate, minimal }: PageProps) => {
     >
       <Link
         href={normalizedUrl}
-        className="text-foreground dark:text-white"
+        className="w-full h-full flex items-center text-foreground dark:text-white"
         onClick={onNavigate}
       >
         {node.name}
