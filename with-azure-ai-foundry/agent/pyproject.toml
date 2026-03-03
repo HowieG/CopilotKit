@@ -1,0 +1,17 @@
+[project]
+name = "foundry-agent"
+version = "0.1.0"
+description = "Azure AI Foundry agent for CopilotKit via Microsoft Agent Framework"
+requires-python = ">=3.11"
+dependencies = [
+    "agent-framework",
+    "agent-framework-azure-ai",
+    "agent-framework-ag-ui",
+    "azure-identity",
+    "fastapi",
+    "uvicorn[standard]",
+    "python-dotenv",
+]
+
+[tool.uv]
+prerelease = "allow"

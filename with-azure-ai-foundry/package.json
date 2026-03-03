@@ -1,0 +1,30 @@
+{
+  "name": "with-azure-ai-foundry",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -k -n frontend,agent -c blue,red \"npm run dev:frontend\" \"npm run dev:agent\"",
+    "dev:frontend": "next dev -p 3000",
+    "dev:agent": "cd agent && uv run src/foundry_agent.py",
+    "build": "next build",
+    "start": "next start",
+    "install:agent": "cd agent && uv sync",
+    "postinstall": "node postinstall.js"
+  },
+  "dependencies": {
+    "@ag-ui/client": "^0.0.46",
+    "@copilotkit/react-core": "^1.52.0",
+    "@copilotkit/react-ui": "^1.52.0",
+    "@copilotkit/runtime": "^1.52.0",
+    "next": "^15.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "concurrently": "^9.1.0",
+    "typescript": "^5.7.0"
+  }
+}
