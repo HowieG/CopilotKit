@@ -16,6 +16,7 @@ const FRAMEWORKS = [
   "aws-strands",
   "a2a",
   "built-in-agent",
+  "azure-ai-foundry",
 ];
 
 export function middleware(request: NextRequest) {
