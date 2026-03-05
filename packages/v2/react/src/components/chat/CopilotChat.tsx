@@ -281,10 +281,12 @@ export function CopilotChat({
   // Memoize messages array - only create new reference when content actually changes
   // (agent.messages is mutated in place, so we need a new reference for React to detect changes)
 
-  const messages = useMemo(
-    () => [...agent.messages],
-    [JSON.stringify(agent.messages)],
-  );
+  const messages = useMemo(() => {
+    const seen = new Map<string, number>();
+    const raw = [...agent.messages];
+    raw.forEach((msg, i) => seen.set(msg.id, i));
+    return raw.filter((msg, i) => seen.get(msg.id) === i);
+  }, [JSON.stringify(agent.messages)]);
 
   const finalProps = merge(mergedProps, {
     messages,
