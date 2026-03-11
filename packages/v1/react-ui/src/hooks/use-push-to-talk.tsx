@@ -155,7 +155,9 @@ export const usePushToTalk = ({
           recordedChunks.current = [];
           setPushToTalkState("idle");
           const message = await sendFunction(transcription);
-          setStartReadingFromMessageId(message.id);
+          if (message) {
+            setStartReadingFromMessageId(message.id);
+          }
         });
       }
     }
